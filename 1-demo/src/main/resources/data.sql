@@ -1,0 +1,5 @@
+insert into customer (id, first_name, last_name, email_address, address, city, country, phone_number) values (1, 'Barrett', 'Velez', 'bvelez0@google.pl', '4747 Butternut Crossing', 'Pestovo', 'Russia', '+7 (584) 984-8612');
+insert into customer (id, first_name, last_name, email_address, address, city, country, phone_number) values (2, 'Martynne', 'Haydn', 'mhaydn1@multiply.com', '713 Maple Wood Circle', 'Carmen', 'Philippines', '+63 (477) 280-2056');
+insert into customer (id, first_name, last_name, email_address, address, city, country, phone_number) values (3, 'Myrle', 'Pawelek', 'mpawelek2@state.gov', '034 Mariners Cove Point', 'Itaberaí', 'Brazil', '+55 (445) 165-2033');
+insert into customer (id, first_name, last_name, email_address, address, city, country, phone_number) values (4, 'Mano', 'Borit', 'mborit3@google.it', '78 Buell Court', 'Charxin', 'Uzbekistan', '+998 (642) 742-1954');
+ALTER TABLE CUSTOMER ALTER COLUMN id RESTART WITH 1001;
