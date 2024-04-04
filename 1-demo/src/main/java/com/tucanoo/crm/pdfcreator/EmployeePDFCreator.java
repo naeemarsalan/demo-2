@@ -52,7 +52,7 @@ public class EmployeePDFCreator {
             contentStream.endText();
             contentStream.close();
 
-            String fileName =  employee.get(i).get("firstName").toString() + "_" + employee.get(i).get("lastName").toString() + ".pdf";
+            String fileName =  "pdf/" + employee.get(i).get("firstName").toString() + "_" + employee.get(i).get("lastName").toString() + ".pdf";
             document.save(fileName);
             document.close();
             } catch (IOException e) {

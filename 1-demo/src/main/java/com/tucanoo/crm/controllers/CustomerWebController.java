@@ -129,7 +129,7 @@ public class CustomerWebController {
         int draw =  1;
         int length = 30;
         int start = 30;
-        Page<Customer> customers = customerService.getAllCustomers(PageRequest.of(0, 1000));
+        Page<Customer> customers = customerService.getAllCustomers(PageRequest.of(0, 996));
         long totalRecords = customers.getTotalElements();
 
         List<Map<String, Object>> cells = new ArrayList<>();
