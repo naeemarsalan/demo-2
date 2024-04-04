@@ -17,7 +17,13 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.tucanoo.crm.pdfcreator.EmployeePDFCreator;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import com.google.gson.JsonObject;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +38,7 @@ public class CustomerWebController {
 
     private final CustomerRepository customerRepository;
     private final CustomerService customerService;
+    private static final Logger logger = LoggerFactory.getLogger(CustomerWebController.class);
 
     @GetMapping
     public String index() {
@@ -129,7 +136,7 @@ public class CustomerWebController {
         int draw =  1;
         int length = 30;
         int start = 30;
-        Page<Customer> customers = customerService.getAllCustomers(PageRequest.of(0, 1));
+        Page<Customer> customers = customerService.getAllCustomers(PageRequest.of(0, 10));
         long totalRecords = customers.getTotalElements();
 
         List<Map<String, Object>> cells = new ArrayList<>();
@@ -147,9 +154,16 @@ public class CustomerWebController {
         });
 
         String json = null;
-
+        LocalDateTime startTime = LocalDateTime.now();
         EmployeePDFCreator.createPDF(cells);
-        return json;
+        LocalDateTime endTime = LocalDateTime.now();
+        Duration duration = Duration.between(startTime, endTime);
+        long milliseconds = duration.toMillis();
+        logger.info("Report creation took " + milliseconds + " milli seconds.");
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("Total Report Time ms", milliseconds);
+
+        return jsonObject.toString();
     }
 
     @GetMapping("/create")
