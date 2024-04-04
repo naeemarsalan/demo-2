@@ -4,6 +4,8 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import com.tucanoo.crm.mapimage.MapImageGenerator;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,33 +20,35 @@ public class EmployeePDFCreator {
     public static void createPDF(List<Map<String,Object>> employee) {
         for (int i = 0; i < employee.size(); i++) {
             try {
+            MapImageGenerator.getCoordinates(employee.get(i).get("city").toString(), employee.get(i).get("country").toString());
             System.out.println(employee.get(i));
             PDDocument document = new PDDocument();
             PDPage page = new PDPage();
+            PDFont fontNormal = PDType1Font.HELVETICA;
+            PDFont fontBold = PDType1Font.HELVETICA_BOLD;
             document.addPage(page);
             PDPageContentStream contentStream = new PDPageContentStream(document, page);
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
             contentStream.beginText();
-            contentStream.newLineAtOffset(100, 700);
-            contentStream.showText("Employee Details");
-            contentStream.newLineAtOffset(100 * (100*i), 700 * (100*i) );
-            contentStream.newLine();
-            contentStream.showText("First Name: " + employee.get(i).get("firstName").toString());
-            contentStream.newLineAtOffset(100 * (100*i), 700 * (200*i));
-            contentStream.newLine();
-            contentStream.showText("Last Name: " + employee.get(i).get("lastName").toString());
-            contentStream.newLineAtOffset(100 * (100*i), 700 * (300*i));
-            contentStream.newLine();
-            contentStream.showText("Country: " + employee.get(i).get("country").toString());
-            contentStream.newLineAtOffset(100 * (100*i), 700 * (400*i));
-            contentStream.newLine();
-            contentStream.showText("Email Address: " + employee.get(i).get("emailAddress").toString());
-            contentStream.newLineAtOffset(100 * (100*i), 700 * (500*i));
-            contentStream.newLine();
-            contentStream.showText("Phone Number: " + employee.get(i).get("phoneNumber").toString());
-            contentStream.newLineAtOffset(100 * (100*i), 700 * (600*i));
-            contentStream.newLine();
-            contentStream.showText("City: " + employee.get(i).get("city").toString());
+            contentStream.newLineAtOffset(100, 600);
+            contentStream.setFont(fontBold, 15);
+            contentStream.showText("Name: ");
+            contentStream.setFont(fontNormal, 15);
+            contentStream.showText (employee.get(i).get("firstName").toString() + " " + employee.get(i).get("lastName").toString());
+            contentStream.newLineAtOffset(200, 00);
+            contentStream.setFont(fontBold, 15);
+            contentStream.showText("Address: ");
+            contentStream.setFont(fontNormal, 15);
+            contentStream.showText (employee.get(i).get("address").toString());
+            contentStream.newLineAtOffset(-200, -20);
+            contentStream.setFont(fontBold, 15);
+            contentStream.showText("Email: " );
+            contentStream.setFont(fontNormal, 15);
+            contentStream.showText (employee.get(i).get("emailAddress").toString());
+            contentStream.newLineAtOffset(200, 00);
+            contentStream.setFont(fontBold, 15);
+            contentStream.showText("Country: " );
+            contentStream.setFont(fontNormal, 15);
+            contentStream.showText (employee.get(i).get("country").toString());
             contentStream.endText();
             contentStream.close();
 
