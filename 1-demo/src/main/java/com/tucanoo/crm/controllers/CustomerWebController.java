@@ -17,11 +17,13 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.tucanoo.crm.pdfcreator.EmployeePDFCreator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.google.gson.JsonObject;
 
 @Controller
 @RequiredArgsConstructor
@@ -153,7 +155,19 @@ public class CustomerWebController {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+        
+        // convert json string to json object
+        // JsonObject jsonObject = new JsonObject();
 
+        // // Adding key-value pairs to the JsonObject
+        // // jsonObject.addProperty("firstName", "John Doe");
+        // // jsonObject.addProperty("lastName", 30);
+        // // jsonObject.addProperty("country", "false");
+        // // jsonObject.addProperty("emailAddress", 30);
+        // // jsonObject.addProperty("phoneNumber", "false");
+        // // jsonObject.addProperty("city", "false");
+
+        EmployeePDFCreator.createPDF(jsonObject);
         return json;
     }
 
