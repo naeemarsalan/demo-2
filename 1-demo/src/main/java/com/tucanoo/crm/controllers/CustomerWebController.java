@@ -129,7 +129,7 @@ public class CustomerWebController {
         int draw =  1;
         int length = 30;
         int start = 30;
-        Page<Customer> customers = customerService.getAllCustomers(PageRequest.of(0, 3));
+        Page<Customer> customers = customerService.getAllCustomers(PageRequest.of(0, 1000));
         long totalRecords = customers.getTotalElements();
 
         List<Map<String, Object>> cells = new ArrayList<>();
@@ -144,30 +144,10 @@ public class CustomerWebController {
             cellData.put("phoneNumber", customer.getPhoneNumber());
             cells.add(cellData);
         });
-        Map<String, Object> jsonMap = new HashMap<>();
-        jsonMap.put("draw", draw);
-        jsonMap.put("recordsTotal", totalRecords);
-        jsonMap.put("recordsFiltered", totalRecords);
-        jsonMap.put("data", cells);
+
         String json = null;
-        try {
-            json = new ObjectMapper().writeValueAsString(jsonMap);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        
-        // convert json string to json object
-        // JsonObject jsonObject = new JsonObject();
 
-        // // Adding key-value pairs to the JsonObject
-        // // jsonObject.addProperty("firstName", "John Doe");
-        // // jsonObject.addProperty("lastName", 30);
-        // // jsonObject.addProperty("country", "false");
-        // // jsonObject.addProperty("emailAddress", 30);
-        // // jsonObject.addProperty("phoneNumber", "false");
-        // // jsonObject.addProperty("city", "false");
-
-        EmployeePDFCreator.createPDF(jsonObject);
+        EmployeePDFCreator.createPDF(cells);
         return json;
     }
 
