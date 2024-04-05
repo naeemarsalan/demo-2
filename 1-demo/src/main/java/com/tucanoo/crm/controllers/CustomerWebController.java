@@ -141,7 +141,8 @@ public class CustomerWebController {
         int draw =  1;
         int length = 30;
         int start = 30;
-        Page<Customer> customers = customerService.getAllCustomers(PageRequest.of(0, 10));
+        int numEmployees = 10;
+        Page<Customer> customers = customerService.getAllCustomers(PageRequest.of(0, numEmployees));
         long totalRecords = customers.getTotalElements();
 
         List<Map<String, Object>> cells = new ArrayList<>();
@@ -161,9 +162,10 @@ public class CustomerWebController {
             messageSender.sendMessage("report", json);
         });
         
-        
+        JsonObject res = new JsonObject();
+        res.addProperty("Records added to queue", numEmployees);
 
-        return cells.toString();
+        return res.toString();
     }
     
 
