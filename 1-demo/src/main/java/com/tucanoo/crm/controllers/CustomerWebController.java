@@ -23,7 +23,7 @@ import com.tucanoo.crm.pdfcreator.EmployeePDFCreator;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import com.google.gson.JsonObject;
-
+import com.tucanoo.crm.amq.ReportGenerator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -153,15 +153,13 @@ public class CustomerWebController {
             cells.add(cellData);
         });
 
-        String json = null;
-        LocalDateTime startTime = LocalDateTime.now();
-        EmployeePDFCreator.createPDF(cells);
-        LocalDateTime endTime = LocalDateTime.now();
-        Duration duration = Duration.between(startTime, endTime);
-        long milliseconds = duration.toMillis();
-        logger.info("Report creation took " + milliseconds + " milli seconds.");
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("Total Report Time ms", milliseconds);
+        jsonObject.addProperty("reportType", "sales");
+        jsonObject.addProperty("startDate", "2024-01-01");
+        jsonObject.addProperty("endDate", "2024-03-31");
+        
+        ReportGenerator reportGenerator = new ReportGenerator("tcp://localhost:61616", "report");
+        reportGenerator.submitToQueue(jsonObject);
 
         return jsonObject.toString();
     }
