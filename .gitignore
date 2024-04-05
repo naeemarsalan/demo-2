@@ -6,6 +6,7 @@ build/
 !**/src/test/**
 **/*.pdf
 ### STS ###
+**/*.java
 .apt_generated
 .classpath
 .factorypath
