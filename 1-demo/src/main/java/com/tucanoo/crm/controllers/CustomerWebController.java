@@ -23,13 +23,15 @@ import com.tucanoo.crm.pdfcreator.EmployeePDFCreator;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import com.google.gson.JsonObject;
-
-
+import com.tucanoo.crm.amq.MessageSender;
+import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.google.gson.JsonObject;
+import com.tucanoo.crm.amq.MessageSender;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -130,6 +132,9 @@ public class CustomerWebController {
         }
     }
 
+    @Autowired
+    private MessageSender messageSender;
+
     @GetMapping(value = "/report", produces = "application/json")
     @ResponseBody
     public String report() {
@@ -140,31 +145,27 @@ public class CustomerWebController {
         long totalRecords = customers.getTotalElements();
 
         List<Map<String, Object>> cells = new ArrayList<>();
+
+        
+
         customers.forEach(customer -> {
-            Map<String, Object> cellData = new HashMap<>();
-            cellData.put("id", customer.getId());
-            cellData.put("firstName", customer.getFirstName());
-            cellData.put("lastName", customer.getLastName());
-            cellData.put("address", customer.getAddress());
-            cellData.put("emailAddress", customer.getEmailAddress());
-            cellData.put("city", customer.getCity());
-            cellData.put("country", customer.getCountry());
-            cellData.put("phoneNumber", customer.getPhoneNumber());
-            cells.add(cellData);
+            JsonObject json = new JsonObject();
+            json.addProperty("id", customer.getId());
+            json.addProperty("firstName", customer.getFirstName());
+            json.addProperty("lastName", customer.getLastName());
+            json.addProperty("address", customer.getAddress());
+            json.addProperty("emailAddress", customer.getEmailAddress());
+            json.addProperty("city", customer.getCity());
+            json.addProperty("country", customer.getCountry());
+            json.addProperty("phoneNumber", customer.getPhoneNumber());
+            messageSender.sendMessage("report", json);
         });
+        
+        
 
-        String json = null;
-        LocalDateTime startTime = LocalDateTime.now();
-        EmployeePDFCreator.createPDF(cells);
-        LocalDateTime endTime = LocalDateTime.now();
-        Duration duration = Duration.between(startTime, endTime);
-        long milliseconds = duration.toMillis();
-        logger.info("Report creation took " + milliseconds + " milli seconds.");
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("Total Report Time ms", milliseconds);
-
-        return jsonObject.toString();
+        return cells.toString();
     }
+    
 
     @GetMapping("/create")
     public String create(Model model)
