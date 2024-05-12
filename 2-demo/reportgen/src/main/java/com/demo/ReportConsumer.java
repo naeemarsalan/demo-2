@@ -7,6 +7,7 @@ import org.jboss.logging.Logger;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.demo.pdfcreator.PDFCreator;
 
 public class ReportConsumer {
 
@@ -23,6 +24,9 @@ public class ReportConsumer {
     public void receive(String employeeJson) {
         try {
             Employee employee = objectMapper.readValue(employeeJson, Employee.class);
+            PDFCreator pdfCreator = new PDFCreator();
+            pdfCreator.createPDF(employee);
+
             logger.infof("Received customer: %s", employee.getId());
         } catch (IOException e) {
             logger.error("Failed to parse customer JSON", e);
