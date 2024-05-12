@@ -20,10 +20,10 @@ public class ReportConsumer {
     }
 
     @Incoming("report")
-    public void receive(String customerJson) {
+    public void receive(String employeeJson) {
         try {
-            Customer customer = objectMapper.readValue(customerJson, Customer.class);
-            logger.infof("Received customer: %s", customer.getId());
+            Employee employee = objectMapper.readValue(employeeJson, Employee.class);
+            logger.infof("Received customer: %s", employee.getId());
         } catch (IOException e) {
             logger.error("Failed to parse customer JSON", e);
         }
