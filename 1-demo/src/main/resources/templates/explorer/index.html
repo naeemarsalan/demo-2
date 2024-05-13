@@ -3,6 +3,18 @@
 <head>
     <title>File Explorer</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .card {
+            width: 240px; /* Fixed width for each card */
+        }
+        .icon {
+            width: 48px; /* Fixed width for the icon */
+            height: 48px; /* Fixed height for the icon */
+        }
+        .filename {
+            max-width: 160px; /* Limiting the maximum width of the filename */
+        }
+    </style>
 </head>
 <body class="bg-gray-100 font-sans leading-normal tracking-normal">
     <div class="container mx-auto p-8">
@@ -16,12 +28,12 @@
         <div id="reportOutput" class="mt-4"></div>
 
         <div th:if="${fileNames}" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <div th:each="fileName : ${fileNames}" class="bg-white rounded-lg shadow-md p-4 flex items-center space-x-4">
-                <svg class="h-12 w-12 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div th:each="fileName : ${fileNames}" class="bg-white rounded-lg shadow-md p-4 flex items-center space-x-4 card">
+                <svg class="icon text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zM12 14l9 5-9 5-9-5 9-5zM12 14v10" />
                 </svg>
-                <div class="flex-grow">
-                    <p class="text-lg font-medium text-gray-900" th:text="${fileName}">Filename.pdf</p>
+                <div class="flex-grow filename">
+                    <p class="text-lg font-medium text-gray-900 truncate" th:text="${fileName}">Filename.pdf</p>
                     <a th:href="@{/pdf/{fileName}(fileName=${fileName})}" class="text-blue-500 hover:text-blue-600 transition duration-300 ease-in-out">Open PDF</a>
                 </div>
             </div>
