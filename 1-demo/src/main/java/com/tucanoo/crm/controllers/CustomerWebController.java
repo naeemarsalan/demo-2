@@ -22,14 +22,17 @@ import org.slf4j.LoggerFactory;
 import com.tucanoo.crm.pdfcreator.EmployeePDFCreator;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import com.google.gson.JsonObject;
 
+import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.google.gson.JsonObject;
+import java.io.File;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -45,6 +48,24 @@ public class CustomerWebController {
         return "customer/index";
     }
 
+    private static final String PDF_DIR_PATH = "./pdf";
+    
+    @GetMapping("/file-explorer")
+    public String fileExplorer(Model model) {
+        File pdfDir = new File(PDF_DIR_PATH);
+        if (pdfDir.exists() && pdfDir.isDirectory()) {
+            List<String> fileNames = Arrays.stream(pdfDir.listFiles())
+                                           .filter(file -> file.isFile() && file.getName().endsWith(".pdf"))
+                                           .map(File::getName)
+                                           .collect(Collectors.toList());
+            model.addAttribute("fileNames", fileNames);
+        } else {
+            // Handle the case where the directory does not exist
+            model.addAttribute("errorMessage", "Directory not found.");
+        }
+        return "explorer/index";
+    }
+
     @GetMapping(value = "/data_for_datatable", produces = "application/json")
     @ResponseBody
     public String getDataForDatatable(@RequestParam Map<String, Object> params) {
@@ -56,8 +77,9 @@ public class CustomerWebController {
         String sortName = "id";
         String dataTableOrderColumnIdx = params.get("order[0][column]").toString();
         String dataTableOrderColumnName = "columns[" + dataTableOrderColumnIdx + "][data]";
-        if (params.containsKey(dataTableOrderColumnName))
+        if (params.containsKey(dataTableOrderColumnName)) {
             sortName = params.get(dataTableOrderColumnName).toString();
+        }
         String sortDir = params.containsKey("order[0][dir]") ? params.get("order[0][dir]").toString() : "asc";
 
         Sort.Order sortOrder = new Sort.Order((sortDir.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC), sortName);
@@ -103,7 +125,6 @@ public class CustomerWebController {
         return json;
     }
 
-
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable String id, Model model) {
         Customer customerInstance = customerRepository.findById(Long.valueOf(id)).get();
@@ -115,16 +136,17 @@ public class CustomerWebController {
 
     @PostMapping("/update")
     public String update(@Valid @ModelAttribute("customerInstance") Customer customerInstance,
-                         BindingResult bindingResult,
-                         Model model,
-                         RedirectAttributes atts) {
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes atts) {
         if (bindingResult.hasErrors()) {
             return "/customer/edit.html";
         } else {
-            if (customerRepository.save(customerInstance) != null)
+            if (customerRepository.save(customerInstance) != null) {
                 atts.addFlashAttribute("message", "Customer updated successfully");
-            else
+            } else {
                 atts.addFlashAttribute("message", "Customer update failed.");
+            }
 
             return "redirect:/customer";
         }
@@ -133,7 +155,7 @@ public class CustomerWebController {
     @GetMapping(value = "/report", produces = "application/json")
     @ResponseBody
     public String report() {
-        int draw =  1;
+        int draw = 1;
         int length = 30;
         int start = 30;
         Page<Customer> customers = customerService.getAllCustomers(PageRequest.of(0, 10));
@@ -167,24 +189,24 @@ public class CustomerWebController {
     }
 
     @GetMapping("/create")
-    public String create(Model model)
-    {
+    public String create(Model model) {
         model.addAttribute("customerInstance", new Customer());
         return "customer/create";
     }
 
     @PostMapping("/save")
     public String save(@Valid @ModelAttribute("customerInstance") Customer customerInstance,
-                       BindingResult bindingResult,
-                       Model model,
-                       RedirectAttributes atts) {
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes atts) {
         if (bindingResult.hasErrors()) {
             return "customer/create";
         } else {
-            if (customerRepository.save(customerInstance) != null)
+            if (customerRepository.save(customerInstance) != null) {
                 atts.addFlashAttribute("message", "Customer created successfully");
-            else
+            } else {
                 atts.addFlashAttribute("message", "Customer creation failed.");
+            }
 
             return "redirect:/customer";
         }

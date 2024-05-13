@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Explorer</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <div class="container mx-auto p-8">
+        <h1 class="text-2xl font-bold mb-8 text-center">Files in PDF Directory</h1>
+        <div th:if="${fileNames}" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div th:each="fileName : ${fileNames}" class="bg-white rounded-lg shadow-md p-4 flex items-center space-x-4">
+                <svg class="h-12 w-12 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zM12 14l9 5-9 5-9-5 9-5zM12 14v10" />
+                </svg>
+                <div class="flex-grow">
+                    <p class="text-lg font-medium text-gray-900" th:text="${fileName}">Filename.pdf</p>
+                    <a th:href="@{/pdf/{fileName}(fileName=${fileName})}" class="text-blue-500 hover:text-blue-600 transition duration-300 ease-in-out">Open PDF</a>
+                </div>
+            </div>
+        </div>
+        <p th:if="${errorMessage}" class="text-red-500 text-center mt-4" th:text="${errorMessage}">Error message here</p>
+    </div>
+</body>
+</html>
