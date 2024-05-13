@@ -11,4 +11,5 @@ FROM registry.access.redhat.com/ubi8/openjdk-17@sha256:e8cc2e476282b75d89c73057b
 WORKDIR /opt/crm
 
 COPY --from=builder /opt/crm/build/libs/*.jar . 
+RUn mkdir ./pdf
 ENTRYPOINT ["java", "-jar" , "crm-1.1.0.jar"] 
