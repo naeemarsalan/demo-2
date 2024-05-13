@@ -4,7 +4,7 @@ WORKDIR /opt/crm
 
 COPY --chown=jboss: . .
 
-RUN ./gradlew assemble
+RUN ./gradlew build -x test 
 
 FROM registry.access.redhat.com/ubi8/openjdk-17@sha256:e8cc2e476282b75d89c73057bfa713db22d72bdb2808d62d981a84c33beb2575 as runtime
 
