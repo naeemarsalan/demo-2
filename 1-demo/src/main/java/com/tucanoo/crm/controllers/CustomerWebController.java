@@ -154,11 +154,13 @@ public class CustomerWebController {
 
     @GetMapping(value = "/report", produces = "application/json")
     @ResponseBody
-    public String report() {
+    public String report(@RequestParam(defaultValue = "10") int size) {
         int draw = 1;
-        int length = 30;
-        int start = 30;
-        Page<Customer> customers = customerService.getAllCustomers(PageRequest.of(0, 10));
+        int length = 30; // You might want to use these in your logic or remove if unnecessary
+        int start = 30;  // You might want to use these in your logic or remove if unnecessary
+
+        // Fetch the page of customers using the size from the query parameter
+        Page<Customer> customers = customerService.getAllCustomers(PageRequest.of(0, size));
         long totalRecords = customers.getTotalElements();
 
         List<Map<String, Object>> cells = new ArrayList<>();
@@ -175,13 +177,13 @@ public class CustomerWebController {
             cells.add(cellData);
         });
 
-        String json = null;
         LocalDateTime startTime = LocalDateTime.now();
-        EmployeePDFCreator.createPDF(cells);
+        EmployeePDFCreator.createPDF(cells);  // Assuming this method exists and is appropriate
         LocalDateTime endTime = LocalDateTime.now();
         Duration duration = Duration.between(startTime, endTime);
         long milliseconds = duration.toMillis();
-        logger.info("Report creation took " + milliseconds + " milli seconds.");
+        logger.info("Report creation took " + milliseconds + " milliseconds.");
+
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("Total Report Time ms", milliseconds);
 

@@ -7,6 +7,14 @@
 <body class="bg-gray-100 font-sans leading-normal tracking-normal">
     <div class="container mx-auto p-8">
         <h1 class="text-2xl font-bold mb-8 text-center">Files in PDF Directory</h1>
+        <div class="flex items-center mb-4">
+            <input type="number" id="reportSize" value="10" class="mr-4 px-4 py-2 border border-gray-300 rounded-md">
+            <button id="generateReportBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Generate Report
+            </button>
+        </div>
+        <div id="reportOutput" class="mt-4"></div>
+
         <div th:if="${fileNames}" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <div th:each="fileName : ${fileNames}" class="bg-white rounded-lg shadow-md p-4 flex items-center space-x-4">
                 <svg class="h-12 w-12 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -20,5 +28,19 @@
         </div>
         <p th:if="${errorMessage}" class="text-red-500 text-center mt-4" th:text="${errorMessage}">Error message here</p>
     </div>
+
+    <script>
+        document.getElementById('generateReportBtn').addEventListener('click', function() {
+            const reportSize = document.getElementById('reportSize').value;
+            fetch(`/customer/report?size=${reportSize}`)
+                .then(response => response.json())
+                .then(data => {
+                    const display = document.getElementById('reportOutput');
+                    display.textContent = `Total Report Time: ${data['Total Report Time ms']} ms`;
+                    display.classList.add('text-lg', 'font-medium', 'text-green-700');
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
 </body>
 </html>
