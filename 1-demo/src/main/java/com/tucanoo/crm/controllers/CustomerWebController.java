@@ -42,7 +42,7 @@ public class CustomerWebController {
 
     @GetMapping
     public String index() {
-        return "/customer/index.html";
+        return "customer/index";
     }
 
     @GetMapping(value = "/data_for_datatable", produces = "application/json")
@@ -110,7 +110,7 @@ public class CustomerWebController {
 
         model.addAttribute("customerInstance", customerInstance);
 
-        return "/customer/edit.html";
+        return "customer/edit";
     }
 
     @PostMapping("/update")
@@ -170,7 +170,7 @@ public class CustomerWebController {
     public String create(Model model)
     {
         model.addAttribute("customerInstance", new Customer());
-        return "/customer/create.html";
+        return "customer/create";
     }
 
     @PostMapping("/save")
@@ -179,7 +179,7 @@ public class CustomerWebController {
                        Model model,
                        RedirectAttributes atts) {
         if (bindingResult.hasErrors()) {
-            return "/customer/create.html";
+            return "customer/create";
         } else {
             if (customerRepository.save(customerInstance) != null)
                 atts.addFlashAttribute("message", "Customer created successfully");
