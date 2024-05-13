@@ -1,0 +1,20 @@
+apiVersion: project.openshift.io/v1
+kind: Project
+metadata:
+  annotations:
+    openshift.io/description: ""
+    openshift.io/display-name: Spring Monolithic Application
+    openshift.io/requester: admin
+    openshift.io/sa.scc.mcs: s0:c27,c24
+    openshift.io/sa.scc.supplemental-groups: 1000750000/10000
+    openshift.io/sa.scc.uid-range: 1000750000/10000
+  labels:
+    kubernetes.io/metadata.name: demo-one
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/audit-version: v1.24
+    pod-security.kubernetes.io/warn: restricted
+    pod-security.kubernetes.io/warn-version: v1.24
+  name: demo-one
+spec:
+  finalizers:
+  - kubernetes
