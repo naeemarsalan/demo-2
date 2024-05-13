@@ -5,6 +5,7 @@ build/
 !**/src/main/**
 !**/src/test/**
 **/*.pdf
+**/target/**
 ### STS ###
 **/*.java
 .apt_generated
