@@ -138,17 +138,8 @@ public class CustomerWebController {
     @GetMapping(value = "/report", produces = "application/json")
     @ResponseBody
     public String report() {
-        int draw =  1;
-        int length = 30;
-        int start = 30;
         int numEmployees = 10;
         Page<Customer> customers = customerService.getAllCustomers(PageRequest.of(0, numEmployees));
-        long totalRecords = customers.getTotalElements();
-
-        List<Map<String, Object>> cells = new ArrayList<>();
-
-        
-
         customers.forEach(customer -> {
             JsonObject json = new JsonObject();
             json.addProperty("id", customer.getId());
@@ -159,9 +150,10 @@ public class CustomerWebController {
             json.addProperty("city", customer.getCity());
             json.addProperty("country", customer.getCountry());
             json.addProperty("phoneNumber", customer.getPhoneNumber());
-            messageSender.sendMessage("report", json);
+            messageSender.sendMessage("reports", json);
         });
-        
+        JsonObject emptyJson = new JsonObject();
+        messageSender.sendMessage("generated-reports", emptyJson);
         JsonObject res = new JsonObject();
         res.addProperty("Records added to queue", numEmployees);
 
