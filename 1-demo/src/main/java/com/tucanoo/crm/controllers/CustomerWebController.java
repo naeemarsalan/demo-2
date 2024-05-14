@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import com.google.gson.JsonObject;
 import com.tucanoo.crm.amq.MessageSender;
-import com.tucanoo.crm.amq.MessageReceiver;
 
 @Controller
 @RequiredArgsConstructor
