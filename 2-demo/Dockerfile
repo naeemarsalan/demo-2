@@ -102,7 +102,9 @@ COPY --from=build --chown=185 /project/target/quarkus-app/*.jar /deployments/
 COPY --from=build --chown=185 /project/target/quarkus-app/app/ /deployments/app/
 COPY --from=build --chown=185 /project/target/quarkus-app/quarkus/ /deployments/quarkus/
 RUN mkdir /tmp/pdf
+RUN USER root
 RUN chown 1000790000:1000790000 /tmp/pdf -R
+RUN User jboss
 EXPOSE 8080
 USER 185
 ENV JAVA_OPTS_APPEND="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
