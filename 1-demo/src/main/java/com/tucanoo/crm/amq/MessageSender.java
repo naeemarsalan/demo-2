@@ -3,6 +3,7 @@ package com.tucanoo.crm.amq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
+
 import com.google.gson.JsonObject;
 
 

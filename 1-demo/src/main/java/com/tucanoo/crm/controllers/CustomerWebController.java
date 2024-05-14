@@ -19,11 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.tucanoo.crm.pdfcreator.EmployeePDFCreator;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import com.google.gson.JsonObject;
-import com.tucanoo.crm.amq.MessageSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import com.google.gson.JsonObject;
 import com.tucanoo.crm.amq.MessageSender;
-
+import com.tucanoo.crm.amq.MessageReceiver;
 
 @Controller
 @RequiredArgsConstructor
@@ -44,7 +39,7 @@ public class CustomerWebController {
 
     @GetMapping
     public String index() {
-        return "/customer/index.html";
+        return "customer/index";
     }
 
     @GetMapping(value = "/data_for_datatable", produces = "application/json")
@@ -58,8 +53,9 @@ public class CustomerWebController {
         String sortName = "id";
         String dataTableOrderColumnIdx = params.get("order[0][column]").toString();
         String dataTableOrderColumnName = "columns[" + dataTableOrderColumnIdx + "][data]";
-        if (params.containsKey(dataTableOrderColumnName))
+        if (params.containsKey(dataTableOrderColumnName)) {
             sortName = params.get(dataTableOrderColumnName).toString();
+        }
         String sortDir = params.containsKey("order[0][dir]") ? params.get("order[0][dir]").toString() : "asc";
 
         Sort.Order sortOrder = new Sort.Order((sortDir.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC), sortName);
@@ -105,28 +101,28 @@ public class CustomerWebController {
         return json;
     }
 
-
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable String id, Model model) {
         Customer customerInstance = customerRepository.findById(Long.valueOf(id)).get();
 
         model.addAttribute("customerInstance", customerInstance);
 
-        return "/customer/edit.html";
+        return "customer/edit";
     }
 
     @PostMapping("/update")
     public String update(@Valid @ModelAttribute("customerInstance") Customer customerInstance,
-                         BindingResult bindingResult,
-                         Model model,
-                         RedirectAttributes atts) {
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes atts) {
         if (bindingResult.hasErrors()) {
-            return "/customer/edit.html";
+            return "customer/edit";
         } else {
-            if (customerRepository.save(customerInstance) != null)
+            if (customerRepository.save(customerInstance) != null) {
                 atts.addFlashAttribute("message", "Customer updated successfully");
-            else
+            } else {
                 atts.addFlashAttribute("message", "Customer update failed.");
+            }
 
             return "redirect:/customer";
         }
@@ -159,27 +155,26 @@ public class CustomerWebController {
 
         return res.toString();
     }
-    
 
     @GetMapping("/create")
-    public String create(Model model)
-    {
+    public String create(Model model) {
         model.addAttribute("customerInstance", new Customer());
-        return "/customer/create.html";
+        return "customer/create";
     }
 
     @PostMapping("/save")
     public String save(@Valid @ModelAttribute("customerInstance") Customer customerInstance,
-                       BindingResult bindingResult,
-                       Model model,
-                       RedirectAttributes atts) {
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes atts) {
         if (bindingResult.hasErrors()) {
-            return "/customer/create.html";
+            return "customer/create";
         } else {
-            if (customerRepository.save(customerInstance) != null)
+            if (customerRepository.save(customerInstance) != null) {
                 atts.addFlashAttribute("message", "Customer created successfully");
-            else
+            } else {
                 atts.addFlashAttribute("message", "Customer creation failed.");
+            }
 
             return "redirect:/customer";
         }
