@@ -83,9 +83,9 @@ FROM registry.access.redhat.com/ubi8/openjdk-21:1.18 as build
 WORKDIR /project
 
 
-COPY --chown=1000790000:1000790000 pom.xml /project/pom.xml
+COPY --chown=185 pom.xml /project/pom.xml
 
-COPY --chown=1000790000:1000790000 src /project/src
+COPY --chown=185 src /project/src
 
 
 RUn mvn -f /project/pom.xml clean package
@@ -97,10 +97,10 @@ ENV LANGUAGE='en_US:en'
 
 
 # We make four distinct layers so if there are application changes the library layers can be re-used
-COPY --from=build --chown=1000790000:1000790000 /project/target/quarkus-app/lib/ /deployments/lib/
-COPY --from=build --chown=1000790000:1000790000 /project/target/quarkus-app/*.jar /deployments/
-COPY --from=build --chown=1000790000:1000790000 /project/target/quarkus-app/app/ /deployments/app/
-COPY --from=build --chown=1000790000:1000790000 /project/target/quarkus-app/quarkus/ /deployments/quarkus/
+COPY --from=build --chown=185 /project/target/quarkus-app/lib/ /deployments/lib/
+COPY --from=build --chown=185 /project/target/quarkus-app/*.jar /deployments/
+COPY --from=build --chown=185 /project/target/quarkus-app/app/ /deployments/app/
+COPY --from=build --chown=185 /project/target/quarkus-app/quarkus/ /deployments/quarkus/
 RUN mkdir /tmp/pdf
 RUN chown 1000790000:1000790000 /tmp/pdf -R
 EXPOSE 8080
