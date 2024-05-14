@@ -85,6 +85,8 @@ WORKDIR /project
 
 COPY --chown=185 pom.xml /project/pom.xml
 
+COPY --chown=185 src /project/src
+
 RUn mvn -f /project/pom.xml clean package
 
 
