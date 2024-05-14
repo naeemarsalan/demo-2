@@ -146,6 +146,7 @@ public class CustomerWebController {
             json.addProperty("country", customer.getCountry());
             json.addProperty("phoneNumber", customer.getPhoneNumber());
             messageSender.sendMessage("reports", json);
+            messageSender.sendMessage("reports-copy", json);
         });
 
         
