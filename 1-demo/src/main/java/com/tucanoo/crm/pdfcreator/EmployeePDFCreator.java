@@ -1,28 +1,24 @@
 package com.tucanoo.crm.pdfcreator;
 
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+import javax.imageio.ImageIO;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
-
-import com.tucanoo.crm.mapimage.MapImageGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
-
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-import java.awt.Graphics;
-import java.io.File;
+import com.tucanoo.crm.mapimage.MapImageGenerator;
 
 
 public class EmployeePDFCreator {
@@ -88,7 +84,7 @@ public class EmployeePDFCreator {
             contentStream.drawImage(image, x, y, imageWidth, imageHeight);
             contentStream.close();
 
-            String fileName =  "pdf/" + employee.get(i).get("firstName").toString() + "_" + employee.get(i).get("lastName").toString() + ".pdf";
+            String fileName =  "/tmp/pdf/" + employee.get(i).get("firstName").toString() + "_" + employee.get(i).get("lastName").toString() + ".pdf";
             document.save(fileName);
             document.close();
             } catch (IOException e) {

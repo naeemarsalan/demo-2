@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class PDFCreator {
 
     public String createPDF(Employee employee) {
-        String filePath = "pdf/" + employee.getFirstName() + "_" + employee.getLastName() + ".pdf";
+        String filePath = "/tmp/pdf/" + employee.getFirstName() + "_" + employee.getLastName() + ".pdf";
         File tempFile = null; // Declare tempFile at a scope accessible to the entire method
         try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage(PDRectangle.A4);

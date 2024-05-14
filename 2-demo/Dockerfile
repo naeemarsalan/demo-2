@@ -87,6 +87,7 @@ COPY --chown=185 pom.xml /project/pom.xml
 
 COPY --chown=185 src /project/src
 
+
 RUn mvn -f /project/pom.xml clean package
 
 
@@ -100,7 +101,7 @@ COPY --from=build --chown=185 /project/target/quarkus-app/lib/ /deployments/lib/
 COPY --from=build --chown=185 /project/target/quarkus-app/*.jar /deployments/
 COPY --from=build --chown=185 /project/target/quarkus-app/app/ /deployments/app/
 COPY --from=build --chown=185 /project/target/quarkus-app/quarkus/ /deployments/quarkus/
-
+RUN mkdir /tmp/pdf
 EXPOSE 8080
 USER 185
 ENV JAVA_OPTS_APPEND="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
