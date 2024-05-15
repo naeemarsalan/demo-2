@@ -1,15 +1,18 @@
 package functions;
 
+import org.eclipse.microprofile.reactive.messaging.Incoming;
+import org.jboss.logging.Logger;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.eclipse.microprofile.reactive.messaging.Incoming;
-
 import io.quarkus.funqy.Funq;
+
 
 /**
  * Your Function class
  */
 public class Function {
+    private static final Logger LOGGER = Logger.getLogger(Function.class);
 
     /**
      * Use the Quarkus Funqy extension for our function. This function simply echoes its input
@@ -22,9 +25,9 @@ public class Function {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             Employee person = objectMapper.readValue(message, Employee.class);
-            System.out.println("Received message from: " + person.getFirstName());
+            LOGGER.infov("Received message from: {0}", person.getFirstName());
         } catch (Exception e) {
-            System.err.println("Error processing message: " + e.getMessage());
+            LOGGER.error("Error processing message: " + e.getMessage(), e);
         }
     }
 
