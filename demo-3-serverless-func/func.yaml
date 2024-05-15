@@ -3,6 +3,7 @@ name: demo-3-serverless-func
 runtime: quarkus
 created: 2024-05-15T07:00:54.362781486Z
 build:
+  builder: s2i
   buildEnvs:
   - name: BP_NATIVE_IMAGE
     value: "false"
