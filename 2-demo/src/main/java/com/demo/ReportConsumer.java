@@ -33,6 +33,7 @@ public class ReportConsumer {
             PDFCreator pdfCreator = new PDFCreator();
             String pdfPath = pdfCreator.createPDF(employee);  // Ensure createPDF returns the file path
 
+            logger.info("Generated PDF report for employee: " + employee.getName());
             // // Convert PDF to Base64
             byte[] pdfData = Files.readAllBytes(Paths.get(pdfPath));
             String encodedPdf = Base64.getEncoder().encodeToString(pdfData);
@@ -40,6 +41,7 @@ public class ReportConsumer {
             // Modify JSON payload to include Base64 PDF
             ObjectNode rootNode = (ObjectNode) objectMapper.readTree(employeeJson);
             rootNode.put("pdf", encodedPdf);
+            logger.info("Added employee PDF to queue: " + employee.getName());
             return rootNode.toString();  // This JSON with PDF is now sent to the next queue
         } catch (IOException e) {
             logger.error("Failed to process employee PDF report", e);

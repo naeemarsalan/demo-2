@@ -29,7 +29,6 @@ public class MapImageGenerator {
         URL url = new URL(endpoint);
         JsonNode obj = get(url);
         JsonNode coordinates = obj.get("features").get(0).get("geometry").get("coordinates");
-        System.out.println(coordinates);
         return coordinates;
     }
 
