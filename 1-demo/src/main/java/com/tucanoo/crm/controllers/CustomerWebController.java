@@ -150,7 +150,7 @@ public class CustomerWebController {
 
         
         JsonObject res = new JsonObject();
-        res.addProperty("Records added to queue", numEmployees);
+        res.addProperty("Records added to queue", size);
 
         return res.toString();
     }
