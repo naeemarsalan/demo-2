@@ -132,9 +132,8 @@ public class CustomerWebController {
 
     @GetMapping(value = "/report", produces = "application/json")
     @ResponseBody
-    public String report() {
-        int numEmployees = 10;
-        Page<Customer> customers = customerService.getAllCustomers(PageRequest.of(0, numEmployees));
+    public String report(@RequestParam(defaultValue = "10") int size) {
+        Page<Customer> customers = customerService.getAllCustomers(PageRequest.of(0, size));
         customers.forEach(customer -> {
             JsonObject json = new JsonObject();
             json.addProperty("id", customer.getId());
